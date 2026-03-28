@@ -4,19 +4,19 @@
 -- ─── Schema constraints ───────────────────────────────────────────────────────
 
 -- Prevent duplicate passes for the same customer + promotion
-ALTER TABLE wallet_passes
-  ADD CONSTRAINT IF NOT EXISTS uq_pass_customer_promotion
-  UNIQUE (customer_id, promotion_id);
+DO $$ BEGIN
+  ALTER TABLE wallet_passes ADD CONSTRAINT uq_pass_customer_promotion UNIQUE (customer_id, promotion_id);
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 -- Stamps can never go negative
-ALTER TABLE wallet_passes
-  ADD CONSTRAINT IF NOT EXISTS chk_stamps_non_negative
-  CHECK (current_stamps >= 0);
+DO $$ BEGIN
+  ALTER TABLE wallet_passes ADD CONSTRAINT chk_stamps_non_negative CHECK (current_stamps >= 0);
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 -- Promotion must require between 1 and 50 stamps
-ALTER TABLE promotions
-  ADD CONSTRAINT IF NOT EXISTS chk_stamps_required_range
-  CHECK (stamps_required >= 1 AND stamps_required <= 50);
+DO $$ BEGIN
+  ALTER TABLE promotions ADD CONSTRAINT chk_stamps_required_range CHECK (stamps_required >= 1 AND stamps_required <= 50);
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 -- One active promotion per business (partial unique index)
 CREATE UNIQUE INDEX IF NOT EXISTS uq_one_active_promotion_per_business

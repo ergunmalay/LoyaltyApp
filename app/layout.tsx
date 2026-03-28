@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
+import { Toaster } from 'sonner'
 import './globals.css'
 
 const poppins = Poppins({
@@ -9,8 +10,8 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: 'LoyaltyPass',
-  description: 'Digital stamp cards for coffee shops',
+  title: 'PocketStamp',
+  description: 'Digital stamp cards for your coffee shop. No paper. No app. Just love.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={poppins.variable}>
       <body className="min-h-screen bg-orange-50 text-stone-900 antialiased font-sans">
         {children}
+        <Toaster position="top-center" richColors />
       </body>
     </html>
   )

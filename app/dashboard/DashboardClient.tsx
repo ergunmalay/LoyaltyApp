@@ -179,6 +179,20 @@ export default function DashboardClient({ business, staffUser, promotion, activi
             📷 Open Staff Scanner
           </a>
 
+          <a
+            href="/analytics"
+            className="block w-full py-4 bg-white border-2 border-orange-200 text-orange-600 text-lg font-bold rounded-2xl text-center hover:bg-orange-50 transition-colors"
+          >
+            📊 View Analytics
+          </a>
+
+          <a
+            href="/settings"
+            className="block w-full py-4 bg-white border-2 border-stone-200 text-stone-600 text-lg font-bold rounded-2xl text-center hover:bg-stone-50 transition-colors"
+          >
+            ⚙️ Settings
+          </a>
+
           {/* Activity log */}
           <div className="bg-white rounded-3xl p-6 shadow-sm border border-orange-100">
             <h2 className="text-xl font-black text-stone-900 mb-4">Recent Activity</h2>

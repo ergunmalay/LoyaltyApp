@@ -82,7 +82,7 @@ export async function GET(
     headers: {
       // Use the real MIME type so iOS/macOS handle it (though unsigned, it won't install)
       'Content-Type': 'application/vnd.apple.pkpass',
-      'Content-Disposition': `attachment; filename="loyaltypass-${pass.serial_number}.pkpass"`,
+      'Content-Disposition': `attachment; filename="pocketstamp-${pass.serial_number}.pkpass"`,
     },
   })
 }

@@ -2,11 +2,44 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { createServiceClient } from '@/lib/supabase-server'
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+const NAME_RE = /^[a-zA-Z\s'\-]{2,50}$/
+
 export async function POST(req: NextRequest) {
-  const { businessName, yourName, email, password } = await req.json()
+  let body: unknown
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
+  }
+
+  if (!body || typeof body !== 'object') {
+    return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
+  }
+
+  const raw = body as Record<string, unknown>
+  const businessName = typeof raw.businessName === 'string' ? raw.businessName.trim() : ''
+  const yourName = typeof raw.yourName === 'string' ? raw.yourName.trim() : ''
+  const email = typeof raw.email === 'string' ? raw.email.trim().toLowerCase() : ''
+  const password = typeof raw.password === 'string' ? raw.password : ''
 
   if (!businessName || !yourName || !email || !password) {
     return NextResponse.json({ error: 'All fields are required' }, { status: 400 })
+  }
+  if (businessName.length < 2 || businessName.length > 50) {
+    return NextResponse.json({ error: 'Business name must be 2–50 characters' }, { status: 400 })
+  }
+  if (!NAME_RE.test(yourName)) {
+    return NextResponse.json({ error: 'Name contains invalid characters' }, { status: 400 })
+  }
+  if (!EMAIL_RE.test(email)) {
+    return NextResponse.json({ error: 'Enter a valid email address' }, { status: 400 })
+  }
+  if (password.length < 8) {
+    return NextResponse.json({ error: 'Password must be at least 8 characters' }, { status: 400 })
+  }
+  if (!/[0-9]/.test(password)) {
+    return NextResponse.json({ error: 'Password must include at least one number' }, { status: 400 })
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'

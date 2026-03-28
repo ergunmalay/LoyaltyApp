@@ -3,23 +3,29 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase-client'
+
+function friendlyAuthError(message: string): string {
+  if (/invalid login credentials/i.test(message)) return 'Incorrect email or password.'
+  if (/email not confirmed/i.test(message)) return 'Please confirm your email before signing in.'
+  if (/too many requests/i.test(message)) return 'Too many attempts. Please wait a moment.'
+  return message
+}
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    setError('')
     const supabase = createClient()
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) {
-      setError(error.message)
+      toast.error(friendlyAuthError(error.message))
       setLoading(false)
     } else {
       router.push('/dashboard')
@@ -60,12 +66,6 @@ export default function LoginPage() {
                 className="w-full px-4 py-3 border-2 border-stone-200 rounded-xl text-base focus:outline-none focus:border-orange-400 transition-colors"
               />
             </div>
-
-            {error && (
-              <p className="text-red-600 text-sm bg-red-50 px-4 py-3 rounded-xl font-medium">
-                {error}
-              </p>
-            )}
 
             <button
               type="submit"

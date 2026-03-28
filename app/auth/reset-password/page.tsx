@@ -2,17 +2,16 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { toast } from 'sonner'
 
 export default function ResetPasswordPage() {
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    setError('')
     const res = await fetch('/api/auth/reset-password', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -20,7 +19,7 @@ export default function ResetPasswordPage() {
     })
     const data = await res.json()
     if (!res.ok) {
-      setError(data.error || 'Something went wrong')
+      toast.error(data.error || 'Something went wrong')
       setLoading(false)
       return
     }
@@ -72,12 +71,6 @@ export default function ResetPasswordPage() {
                 className="w-full px-4 py-3 border-2 border-stone-200 rounded-xl text-base focus:outline-none focus:border-orange-400 transition-colors"
               />
             </div>
-
-            {error && (
-              <p className="text-red-600 text-sm bg-red-50 px-4 py-3 rounded-xl font-medium">
-                {error}
-              </p>
-            )}
 
             <button
               type="submit"

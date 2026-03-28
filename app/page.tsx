@@ -7,7 +7,7 @@ export default function LandingPage() {
         <div>
           <div className="text-7xl mb-4">☕</div>
           <h1 className="text-5xl font-black tracking-tight text-stone-900">
-            LoyaltyPass
+            PocketStamp
           </h1>
           <p className="mt-4 text-lg text-stone-500 font-medium">
             Digital stamp cards for your coffee shop.

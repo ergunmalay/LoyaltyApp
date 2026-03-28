@@ -2,33 +2,33 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase-client'
 
 export default function UpdatePasswordPage() {
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (password !== confirm) {
-      setError('Passwords do not match')
+      toast.error('Passwords do not match')
       return
     }
     if (password.length < 6) {
-      setError('Password must be at least 6 characters')
+      toast.error('Password must be at least 6 characters')
       return
     }
     setLoading(true)
-    setError('')
     const supabase = createClient()
     const { error: updateError } = await supabase.auth.updateUser({ password })
     if (updateError) {
-      setError(updateError.message)
+      toast.error(updateError.message)
       setLoading(false)
     } else {
+      toast.success('Password updated!')
       router.push('/dashboard')
       router.refresh()
     }
@@ -71,10 +71,6 @@ export default function UpdatePasswordPage() {
                 className={inputClass}
               />
             </div>
-
-            {error && (
-              <p className="text-red-600 text-sm bg-red-50 px-4 py-3 rounded-xl font-medium">{error}</p>
-            )}
 
             <button
               type="submit"

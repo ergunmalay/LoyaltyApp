@@ -61,7 +61,8 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       )
     }
-    return NextResponse.json({ error: 'Failed to update stamp' }, { status: 500 })
+    console.error('[stamps] rpc error:', rpcError)
+    return NextResponse.json({ error: 'Failed to update stamp', detail: rpcError.message }, { status: 500 })
   }
 
   // Refetch with joins for the scanner UI response
