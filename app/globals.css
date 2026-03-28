@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Strip html5-qrcode default chrome so only the raw video shows */
+#qr-reader {
+  border: none !important;
+}
+#qr-reader__header_message,
+#qr-reader__status_span,
+#qr-reader__dashboard,
+#qr-reader__filescan_input {
+  display: none !important;
+}
+#qr-reader video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 0 !important;
+}
+#qr-reader__scan_region {
+  background: transparent !important;
+  border: none !important;
+}
+#qr-reader__scan_region img {
+  display: none !important;
+}
